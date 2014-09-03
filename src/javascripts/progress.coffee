@@ -29,8 +29,6 @@ vjsProgressEvo = ( options ) ->
         if 0 <= Number(pt.time) <= duration
           createPoint pt.time, pt.text
 
-          console.log pt.time, pt.text
-
   return
 
 videojs.plugin "progressEvo", vjsProgressEvo

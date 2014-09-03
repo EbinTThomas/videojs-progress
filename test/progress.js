@@ -36,8 +36,7 @@
         return $.each(pts, function(idx, pt) {
           var _ref;
           if ((0 <= (_ref = Number(pt.time)) && _ref <= duration)) {
-            createPoint(pt.time, pt.text);
-            return console.log(pt.time, pt.text);
+            return createPoint(pt.time, pt.text);
           }
         });
       });
