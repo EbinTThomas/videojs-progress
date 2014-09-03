@@ -1,8 +1,10 @@
 (function() {
   "use strict";
-  var $, CLASS_PREFIX, vjsProgressEvo;
+  var $, evoClass, vjsProgressEvo;
 
-  CLASS_PREFIX = "vjs-evo-";
+  evoClass = function(className) {
+    return "vjs-" + className + "--evo";
+  };
 
   $ = jQuery;
 
@@ -17,7 +19,7 @@
     createPoint = function(sec, text) {
       var bar, pt;
       pt = $("<div />", {
-        "class": "vjs-evo-progress-point",
+        "class": evoClass("progress-point"),
         "data-sec": sec,
         "data-text": text
       });

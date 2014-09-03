@@ -34,6 +34,7 @@ module.exports = ( grunt ) ->
     compass:
       compile:
         options:
+          outputStyle: "compressed"
           sassDir: "<%= meta.style %>"
           cssDir: "<%= meta.dest_style %>"
           javascriptsDir: "<%= meta.dest_script %>"

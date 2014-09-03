@@ -1,3 +1,4 @@
 "use strict"
 
-CLASS_PREFIX = "vjs-evo-"
+evoClass = ( className ) ->
+  return "vjs-#{className}--evo"

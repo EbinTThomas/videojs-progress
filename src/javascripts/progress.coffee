@@ -10,7 +10,7 @@ vjsProgressEvo = ( options ) ->
 
   createPoint = ( sec, text ) ->
     pt = $("<div />", {
-        "class": "vjs-evo-progress-point"
+        "class": evoClass "progress-point"
         "data-sec": sec,
         "data-text": text
       })
