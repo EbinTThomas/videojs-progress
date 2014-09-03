@@ -41,7 +41,7 @@ module.exports = ( grunt ) ->
       test:
         options:
           sassDir: "<%= meta.style %>"
-          cssDir: "<%= meta.tests %>/stylesheets"
+          cssDir: "<%= meta.tests %>"
           javascriptsDir: "<%= meta.tests %>/javascripts"
           imagesDir: "<%= meta.tests %>/images"
     coffee:
