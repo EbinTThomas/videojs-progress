@@ -2,11 +2,11 @@
   "use strict";
   var $, evoClass, vjsProgressEvo;
 
+  $ = jQuery;
+
   evoClass = function(className) {
     return "vjs-" + className + "--evo";
   };
-
-  $ = jQuery;
 
   vjsProgressEvo = function(options) {
     var control, createPoint, player, pts, video;
@@ -16,14 +16,14 @@
     control = function() {
       return player.controlBar.progressControl;
     };
-    createPoint = function(sec, text) {
-      var bar, pt;
+    createPoint = function(container, sec, text) {
+      var pt;
       pt = $("<div />", {
         "class": evoClass("progress-point"),
         "data-sec": sec,
         "data-text": text
       });
-      bar = control().el().appendChild(pt.get(0));
+      container.append(pt);
       return pt.css({
         left: "" + ((sec / player.duration()) * 100) + "%",
         marginLeft: "-" + (pt.width() / 2) + "px"
@@ -31,12 +31,16 @@
     };
     if ($.isArray(pts)) {
       this.on("loadedmetadata", function() {
-        var duration;
+        var container, duration;
         duration = this.duration();
+        container = $("<div />", {
+          "class": evoClass("progress-points")
+        });
+        control().el().appendChild(container.get(0));
         return $.each(pts, function(idx, pt) {
           var _ref;
           if ((0 <= (_ref = Number(pt.time)) && _ref <= duration)) {
-            return createPoint(pt.time, pt.text);
+            return createPoint(container, pt.time, pt.text);
           }
         });
       });

@@ -47,13 +47,15 @@ module.exports = ( grunt ) ->
       test:
         options:
           sassDir: "<%= meta.dest_style %>"
-          cssDir: "<%= meta.tests %>"
+          cssDir: "<%= meta.tests %>/videojs-evo"
           javascriptsDir: "<%= meta.tests %>/javascripts"
           imagesDir: "<%= meta.tests %>/images"
     coffee:
-      options:
-        bare: false
-        separator: "\x20"
+      compile:
+        options:
+          bare: false
+          separator: "\x20"
+        expand: true
         cwd: "<%= meta.dest_script %>"
         src: ["*.coffee"]
         dest: "<%= meta.dest_script %>"
@@ -70,14 +72,14 @@ module.exports = ( grunt ) ->
                 " */\n"
         sourceMap: true
       build:
-        src: "<%= meta.dest_script %>/progress.js"
-        dest: "<%= meta.dest_script %>/progress.min.js"
+        src: "<%= meta.dest_script %>/vjsProgress.js"
+        dest: "<%= meta.dest_script %>/vjsProgress.min.js"
     copy:
       test:
         expand: true
         cwd: "<%= meta.dest_script %>"
-        src: ["**.js"]
-        dest: "<%= meta.tests %>"
+        src: ["*.js"]
+        dest: "<%= meta.tests %>/videojs-evo"
     clean:
       compiled: [
           "<%= meta.dest_script %>/**/*.coffee"

@@ -1,5 +1,3 @@
-$ = jQuery
-
 vjsProgressEvo = ( options ) ->
   pts = options.points
   player = this
@@ -8,14 +6,14 @@ vjsProgressEvo = ( options ) ->
   control = ->
     return player.controlBar.progressControl
 
-  createPoint = ( sec, text ) ->
+  createPoint = ( container, sec, text ) ->
     pt = $("<div />", {
         "class": evoClass "progress-point"
         "data-sec": sec,
         "data-text": text
       })
 
-    bar = control().el().appendChild pt.get(0)
+    container.append pt
 
     pt.css
       left: "#{(sec/player.duration())*100}%"
@@ -24,10 +22,15 @@ vjsProgressEvo = ( options ) ->
   if $.isArray pts
     @on "loadedmetadata", ->
       duration = @duration()
+      container = $("<div />", {
+          "class": evoClass "progress-points"
+        })
+
+      control().el().appendChild container.get(0)
 
       $.each pts, ( idx, pt ) ->
         if 0 <= Number(pt.time) <= duration
-          createPoint pt.time, pt.text
+          createPoint container, pt.time, pt.text
 
   return
 
