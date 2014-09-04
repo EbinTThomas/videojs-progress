@@ -1,6 +1,9 @@
 vjsProgress = ( options ) ->
-  initTimepoints @, options.timepoints
-  initTooltip @
+  progress = new Progress @
+
+  @on "loadedmetadata", ->
+    progress.createTimepoints options.timepoints
+    progress.createTooltip()
 
   return
 

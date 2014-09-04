@@ -1,6 +1,6 @@
 (function() {
   "use strict";
-  var $, evoClass, initTimepoints, initTooltip, vjsProgress;
+  var $, Progress, evoClass, vjsProgress;
 
   $ = jQuery;
 
@@ -8,53 +8,56 @@
     return "" + (hasDot ? "." : "") + "vjs-" + className + "--evo";
   };
 
-  initTimepoints = function(player, pointsData) {
-    var TIMEPOINT_ID_DELIMITER, createTimepoint, timepoints, video;
-    if (!$.isArray(pointsData)) {
-      return false;
+  Progress = (function() {
+    function Progress(player) {
+      this.player = player;
     }
-    video = $(player.el());
-    TIMEPOINT_ID_DELIMITER = "-vjs-timepoint-";
-    timepoints = [];
-    createTimepoint = function(sec, text) {
-      var pt;
-      pt = $("<div />", {
-        "id": "" + (video.attr("id")) + TIMEPOINT_ID_DELIMITER + (timepoints.length + 1),
-        "class": evoClass("progress-point")
-      });
-      timepoints.push({
-        sec: sec,
-        text: text
-      });
-      return pt.css("left", "" + ((sec / player.duration()) * 100) + "%");
-    };
-    player.on("loadedmetadata", function() {
-      var container, duration;
+
+    Progress.prototype.createTimepoints = function(data) {
+      var TIMEPOINT_ID_DELIMITER, container, createTimepoint, duration, player, timepoints, video;
+      if (!$.isArray(data)) {
+        return false;
+      }
+      player = this.player;
+      video = $(player.el());
       duration = player.duration();
+      TIMEPOINT_ID_DELIMITER = "-vjs-timepoint-";
+      timepoints = [];
       container = $("<div />", {
         "class": evoClass("progress-points")
       });
-      $.each(pointsData, function(idx, pt) {
+      createTimepoint = function(sec, text) {
+        var pt;
+        pt = $("<div />", {
+          "id": "" + (video.attr("id")) + TIMEPOINT_ID_DELIMITER + (timepoints.length + 1),
+          "class": evoClass("progress-point")
+        });
+        timepoints.push({
+          sec: sec,
+          text: text
+        });
+        return pt.css("left", "" + ((sec / duration) * 100) + "%");
+      };
+      $.each(data, function(idx, pt) {
         var _ref;
         if ((0 <= (_ref = Number(pt.time)) && _ref <= duration)) {
           return container.append(createTimepoint(pt.time, pt.text));
         }
       });
       player.controlBar.progressControl.el().appendChild(container.get(0));
-      return $(evoClass("progress-point", true)).on("click", function() {
+      $(evoClass("progress-point", true)).on("click", function() {
         player.currentTime(timepoints[this.id.split(TIMEPOINT_ID_DELIMITER)[1] - 1].sec);
         return false;
       });
-    });
-    return true;
-  };
+      return true;
+    };
 
-  initTooltip = function(player) {
-    return player.on("loadedmetadata", function() {
-      var duration, progress;
+    Progress.prototype.createTooltip = function() {
+      var duration, player, progress;
+      player = this.player;
       progress = player.controlBar.progressControl;
       duration = player.duration();
-      return $(progress.el()).on("mousemove", function(event) {
+      $(progress.el()).on("mousemove", function(event) {
         var bar, currentPos, offsetLeft, seekBar;
         bar = $(progress.el());
         offsetLeft = bar.offset().left;
@@ -62,12 +65,19 @@
         console.log((currentPos - offsetLeft) / bar.width() * duration);
         seekBar = progress.seekBar;
       });
-    });
-  };
+    };
+
+    return Progress;
+
+  })();
 
   vjsProgress = function(options) {
-    initTimepoints(this, options.timepoints);
-    initTooltip(this);
+    var progress;
+    progress = new Progress(this);
+    this.on("loadedmetadata", function() {
+      progress.createTimepoints(options.timepoints);
+      return progress.createTooltip();
+    });
   };
 
   videojs.plugin("progress", vjsProgress);
