@@ -25,23 +25,28 @@ module.exports = ( grunt ) ->
       dest_image: "<%= meta.dest %>/images"
       tests: "test"
     concat:
-      progress:
+      coffee_progress:
         src: [
             "<%= meta.script %>/definition.coffee"
             "<%= meta.script %>/progress.coffee"
           ]
-        dest: "<%= meta.script %>/vjsProgress.coffee"
+        dest: "<%= meta.dest_script %>/vjsProgress.coffee"
+      sass:
+        src: [
+            "<%= meta.style %>/progress.scss"
+          ]
+        dest: "<%= meta.dest_style %>/<%= pkg.name %>.scss"
     compass:
       compile:
         options:
           outputStyle: "compressed"
-          sassDir: "<%= meta.style %>"
+          sassDir: "<%= meta.dest_style %>"
           cssDir: "<%= meta.dest_style %>"
           javascriptsDir: "<%= meta.dest_script %>"
           imagesDir: "<%= meta.dest_image %>"
       test:
         options:
-          sassDir: "<%= meta.style %>"
+          sassDir: "<%= meta.dest_style %>"
           cssDir: "<%= meta.tests %>"
           javascriptsDir: "<%= meta.tests %>/javascripts"
           imagesDir: "<%= meta.tests %>/images"
@@ -49,9 +54,10 @@ module.exports = ( grunt ) ->
       options:
         bare: false
         separator: "\x20"
-      build:
-        src: "<%= meta.script %>/vjsProgress.coffee"
-        dest: "<%= meta.dest_script %>/progress.js"
+        cwd: "<%= meta.dest_script %>"
+        src: ["*.coffee"]
+        dest: "<%= meta.dest_script %>"
+        ext: ".js"
     uglify:
       options:
         banner: "/*!\n" +
@@ -72,7 +78,14 @@ module.exports = ( grunt ) ->
         cwd: "<%= meta.dest_script %>"
         src: ["**.js"]
         dest: "<%= meta.tests %>"
+    clean:
+      compiled: [
+          "<%= meta.dest_script %>/**/*.coffee"
+          "<%= meta.dest_style %>/**/*.scss"
+        ]
 
   grunt.loadNpmTasks task for task in npmTasks
 
-  grunt.registerTask "default", ["concat", "compass", "coffee", "uglify", "copy"]
+  grunt.registerTask "script", ["concat:coffee_progress", "coffee", "uglify"]
+  grunt.registerTask "css", ["concat:sass", "compass"]
+  grunt.registerTask "default", ["script", "css", "copy", "clean"]
