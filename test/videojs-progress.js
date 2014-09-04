@@ -5,7 +5,7 @@
   $ = jQuery;
 
   evoClass = function(className, hasDot) {
-    return "" + (hasDot ? "." : "") + "vjs-" + className + "--evo";
+    return "" + (hasDot ? "." : "") + "vjs-" + className;
   };
 
   Progress = (function() {
@@ -14,23 +14,23 @@
     }
 
     Progress.prototype.createTimepoints = function(data) {
-      var TIMEPOINT_ID_DELIMITER, container, createTimepoint, duration, player, timepoints, video;
+      var container, createTimepoint, delimiter, duration, player, timepoints, video;
       if (!$.isArray(data)) {
         return false;
       }
       player = this.player;
       video = $(player.el());
       duration = player.duration();
-      TIMEPOINT_ID_DELIMITER = "-vjs-timepoint-";
+      delimiter = "-vjs-timepoint-";
       timepoints = [];
       container = $("<div />", {
-        "class": evoClass("progress-points")
+        "class": evoClass("progress-timepoints")
       });
       createTimepoint = function(sec, text) {
         var pt;
         pt = $("<div />", {
-          "id": "" + (video.attr("id")) + TIMEPOINT_ID_DELIMITER + (timepoints.length + 1),
-          "class": evoClass("progress-point")
+          "id": "" + (video.attr("id")) + delimiter + (timepoints.length + 1),
+          "class": evoClass("progress-timepoint")
         });
         timepoints.push({
           sec: sec,
@@ -45,8 +45,8 @@
         }
       });
       player.controlBar.progressControl.el().appendChild(container.get(0));
-      $(evoClass("progress-point", true)).on("click", function() {
-        player.currentTime(timepoints[this.id.split(TIMEPOINT_ID_DELIMITER)[1] - 1].sec);
+      $(evoClass("progress-timepoint", true)).on("click", function() {
+        player.currentTime(timepoints[this.id.split(delimiter)[1] - 1].sec);
         return false;
       });
       return true;

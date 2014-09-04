@@ -28,37 +28,31 @@ module.exports = ( grunt ) ->
       coffee_progress:
         src: [
             "<%= meta.script %>/intro.coffee"
-            "<%= meta.script %>/timepoints.coffee"
-            "<%= meta.script %>/tooltip.coffee"
+            "<%= meta.script %>/progress.coffee"
             "<%= meta.script %>/outro.coffee"
           ]
-        dest: "<%= meta.dest_script %>/<%= pkg.name %>.coffee"
+        dest: "<%= meta.dest %>/<%= pkg.name %>.coffee"
       sass:
         src: [
             "<%= meta.style %>/progress.scss"
           ]
-        dest: "<%= meta.dest_style %>/<%= pkg.name %>.scss"
+        dest: "<%= meta.dest %>/<%= pkg.name %>.scss"
     compass:
       compile:
         options:
           outputStyle: "compressed"
-          sassDir: "<%= meta.dest_style %>"
-          cssDir: "<%= meta.dest_style %>"
-          javascriptsDir: "<%= meta.dest_script %>"
+          sassDir: "<%= meta.dest %>"
+          cssDir: "<%= meta.dest %>"
           imagesDir: "<%= meta.dest_image %>"
-      test:
-        options:
-          sassDir: "<%= meta.dest_style %>"
-          cssDir: "<%= meta.tests %>"
     coffee:
       compile:
         options:
           bare: false
           separator: "\x20"
         expand: true
-        cwd: "<%= meta.dest_script %>"
+        cwd: "<%= meta.dest %>"
         src: ["*.coffee"]
-        dest: "<%= meta.dest_script %>"
+        dest: "<%= meta.dest %>"
         ext: ".js"
     uglify:
       options:
@@ -72,18 +66,17 @@ module.exports = ( grunt ) ->
                 " */\n"
         sourceMap: true
       build:
-        src: "<%= meta.dest_script %>/<%= pkg.name %>.js"
-        dest: "<%= meta.dest_script %>/<%= pkg.name %>.min.js"
+        src: "<%= meta.dest %>/<%= pkg.name %>.js"
+        dest: "<%= meta.dest %>/<%= pkg.name %>.min.js"
     copy:
       test:
         expand: true
-        cwd: "<%= meta.dest_script %>"
-        src: ["*.js"]
+        cwd: "<%= meta.dest %>"
+        src: ["*.js", "*.css"]
         dest: "<%= meta.tests %>"
     clean:
       compiled: [
-          "<%= meta.dest_script %>/**/*.coffee"
-          "<%= meta.dest_style %>/**/*.scss"
+          "<%= meta.dest %>/**/*.scss"
         ]
 
   grunt.loadNpmTasks task for task in npmTasks
