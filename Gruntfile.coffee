@@ -27,7 +27,9 @@ module.exports = ( grunt ) ->
     concat:
       coffee_progress:
         src: [
-            "<%= meta.script %>/progress.coffee"
+            "<%= meta.script %>/intro.coffee"
+            "<%= meta.script %>/timepoints.coffee"
+            "<%= meta.script %>/outro.coffee"
           ]
         dest: "<%= meta.dest_script %>/<%= pkg.name %>.coffee"
       sass:

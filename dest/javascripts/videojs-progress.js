@@ -1,6 +1,6 @@
 (function() {
   "use strict";
-  var $, evoClass, vjsProgress;
+  var $, evoClass, initTimepoints, vjsProgress;
 
   $ = jQuery;
 
@@ -8,51 +8,49 @@
     return "" + (hasDot ? "." : "") + "vjs-" + className + "--evo";
   };
 
-  vjsProgress = function(options) {
-    var MARKER_ID_DELIMITER, control, createPoint, initTimepoints, markers, player, pts, video;
-    player = this;
-    video = $(this.el());
-    pts = options.points;
-    markers = [];
-    MARKER_ID_DELIMITER = "-vjs-timepoint-";
-    control = function() {
-      return player.controlBar.progressControl;
-    };
-    initTimepoints = function(pointsData) {
-      return player.on("loadedmetadata", function() {
-        var container, duration;
-        duration = player.duration();
-        container = $("<div />", {
-          "class": evoClass("progress-points")
-        });
-        $.each(pointsData, function(idx, pt) {
-          var _ref;
-          if ((0 <= (_ref = Number(pt.time)) && _ref <= duration)) {
-            return container.append(createPoint(pt.time, pt.text));
-          }
-        });
-        control().el().appendChild(container.get(0));
-        return $(evoClass("progress-point", true)).on("click", function() {
-          player.currentTime(markers[this.id.split(MARKER_ID_DELIMITER)[1] - 1].sec);
-          return false;
-        });
-      });
-    };
-    createPoint = function(sec, text) {
+  initTimepoints = function(player, pointsData) {
+    var TIMEPOINT_ID_DELIMITER, createTimepoint, timepoints, video;
+    if (!$.isArray(pointsData)) {
+      return false;
+    }
+    video = $(player.el());
+    TIMEPOINT_ID_DELIMITER = "-vjs-timepoint-";
+    timepoints = [];
+    createTimepoint = function(sec, text) {
       var pt;
       pt = $("<div />", {
-        "id": "" + (video.attr("id")) + MARKER_ID_DELIMITER + (markers.length + 1),
+        "id": "" + (video.attr("id")) + TIMEPOINT_ID_DELIMITER + (timepoints.length + 1),
         "class": evoClass("progress-point")
       });
-      markers.push({
+      timepoints.push({
         sec: sec,
         text: text
       });
       return pt.css("left", "" + ((sec / player.duration()) * 100) + "%");
     };
-    if ($.isArray(pts)) {
-      initTimepoints(pts);
-    }
+    player.on("loadedmetadata", function() {
+      var container, duration;
+      duration = player.duration();
+      container = $("<div />", {
+        "class": evoClass("progress-points")
+      });
+      $.each(pointsData, function(idx, pt) {
+        var _ref;
+        if ((0 <= (_ref = Number(pt.time)) && _ref <= duration)) {
+          return container.append(createTimepoint(pt.time, pt.text));
+        }
+      });
+      player.controlBar.progressControl.el().appendChild(container.get(0));
+      return $(evoClass("progress-point", true)).on("click", function() {
+        player.currentTime(timepoints[this.id.split(TIMEPOINT_ID_DELIMITER)[1] - 1].sec);
+        return false;
+      });
+    });
+    return true;
+  };
+
+  vjsProgress = function(options) {
+    initTimepoints(this, options.timepoints);
   };
 
   videojs.plugin("progress", vjsProgress);
