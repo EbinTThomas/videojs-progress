@@ -6,4 +6,6 @@
   width: 6px;
   background-color: #FFF;
   border-radius: 3px;
+  margin-left: -3px;
+  cursor: pointer;
 }

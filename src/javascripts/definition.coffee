@@ -2,5 +2,5 @@
 
 $ = jQuery
 
-evoClass = ( className ) ->
-  return "vjs-#{className}--evo"
+evoClass = ( className, hasDot ) ->
+  return "#{if hasDot then "." else ""}vjs-#{className}--evo"

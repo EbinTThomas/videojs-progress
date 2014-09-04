@@ -1,8 +1,12 @@
 .vjs-progress-point--evo {
+  $width: 6px;
+
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 6px;
+  width: $width;
   background-color: #FFF;
   border-radius: 3px;
+  margin-left: -($width/2);
+  cursor: pointer;
 }

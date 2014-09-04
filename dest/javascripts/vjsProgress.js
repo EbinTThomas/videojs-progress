@@ -4,46 +4,54 @@
 
   $ = jQuery;
 
-  evoClass = function(className) {
-    return "vjs-" + className + "--evo";
+  evoClass = function(className, hasDot) {
+    return "" + (hasDot ? "." : "") + "vjs-" + className + "--evo";
   };
 
   vjsProgressEvo = function(options) {
-    var control, createPoint, player, pts, video;
-    pts = options.points;
+    var MARKER_ID_DELIMITER, control, createPoint, initTimepoints, markers, player, pts, video;
     player = this;
     video = $(this.el());
+    pts = options.points;
+    markers = [];
+    MARKER_ID_DELIMITER = "-vjs-timepoint-";
     control = function() {
       return player.controlBar.progressControl;
     };
-    createPoint = function(container, sec, text) {
-      var pt;
-      pt = $("<div />", {
-        "class": evoClass("progress-point"),
-        "data-sec": sec,
-        "data-text": text
-      });
-      container.append(pt);
-      return pt.css({
-        left: "" + ((sec / player.duration()) * 100) + "%",
-        marginLeft: "-" + (pt.width() / 2) + "px"
-      });
-    };
-    if ($.isArray(pts)) {
-      this.on("loadedmetadata", function() {
+    initTimepoints = function(pointsData) {
+      return player.on("loadedmetadata", function() {
         var container, duration;
-        duration = this.duration();
+        duration = player.duration();
         container = $("<div />", {
           "class": evoClass("progress-points")
         });
-        control().el().appendChild(container.get(0));
-        return $.each(pts, function(idx, pt) {
+        $.each(pointsData, function(idx, pt) {
           var _ref;
           if ((0 <= (_ref = Number(pt.time)) && _ref <= duration)) {
-            return createPoint(container, pt.time, pt.text);
+            return container.append(createPoint(pt.time, pt.text));
           }
         });
+        control().el().appendChild(container.get(0));
+        return $(evoClass("progress-point", true)).on("click", function() {
+          player.currentTime(markers[this.id.split(MARKER_ID_DELIMITER)[1] - 1].sec);
+          return false;
+        });
       });
+    };
+    createPoint = function(sec, text) {
+      var pt;
+      pt = $("<div />", {
+        "id": "" + (video.attr("id")) + MARKER_ID_DELIMITER + (markers.length + 1),
+        "class": evoClass("progress-point")
+      });
+      markers.push({
+        sec: sec,
+        text: text
+      });
+      return pt.css("left", "" + ((sec / player.duration()) * 100) + "%");
+    };
+    if ($.isArray(pts)) {
+      initTimepoints(pts);
     }
   };
 
