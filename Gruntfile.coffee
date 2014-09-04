@@ -29,6 +29,7 @@ module.exports = ( grunt ) ->
         src: [
             "<%= meta.script %>/intro.coffee"
             "<%= meta.script %>/timepoints.coffee"
+            "<%= meta.script %>/tooltip.coffee"
             "<%= meta.script %>/outro.coffee"
           ]
         dest: "<%= meta.dest_script %>/<%= pkg.name %>.coffee"

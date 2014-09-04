@@ -1,6 +1,6 @@
 (function() {
   "use strict";
-  var $, evoClass, initTimepoints, vjsProgress;
+  var $, evoClass, initTimepoints, initTooltip, vjsProgress;
 
   $ = jQuery;
 
@@ -49,8 +49,25 @@
     return true;
   };
 
+  initTooltip = function(player) {
+    return player.on("loadedmetadata", function() {
+      var duration, progress;
+      progress = player.controlBar.progressControl;
+      duration = player.duration();
+      return $(progress.el()).on("mousemove", function(event) {
+        var bar, currentPos, offsetLeft, seekBar;
+        bar = $(progress.el());
+        offsetLeft = bar.offset().left;
+        currentPos = event.clientX;
+        console.log((currentPos - offsetLeft) / bar.width() * duration);
+        seekBar = progress.seekBar;
+      });
+    });
+  };
+
   vjsProgress = function(options) {
     initTimepoints(this, options.timepoints);
+    initTooltip(this);
   };
 
   videojs.plugin("progress", vjsProgress);

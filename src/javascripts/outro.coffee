@@ -1,5 +1,6 @@
 vjsProgress = ( options ) ->
-  initTimepoints this, options.timepoints
+  initTimepoints @, options.timepoints
+  initTooltip @
 
   return
 
