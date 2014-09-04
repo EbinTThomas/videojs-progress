@@ -9,8 +9,8 @@
     <script src="video-js/video.js"></script>
     
     <script src="jquery.js"></script>
-    <link href="videojs-evo/videojs-evo.css" rel="stylesheet" type="text/css">
-    <script src="videojs-evo/vjsProgress.js"></script>
+    <link href="videojs-progress.css" rel="stylesheet" type="text/css">
+    <script src="videojs-progress.js"></script>
 
     <!-- Unless using the CDN hosted version, update the URL to the Flash SWF -->
     <script>videojs.options.flash.swf = "video-js/video-js.swf";</script>
@@ -30,7 +30,7 @@
       (function() {
         var player = videojs("example_video_1");
 
-        player.progressEvo({
+        player.progress({
           points: [
               {
                 time: 9.5,

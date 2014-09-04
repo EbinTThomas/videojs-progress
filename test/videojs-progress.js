@@ -1,6 +1,6 @@
 (function() {
   "use strict";
-  var $, evoClass, vjsProgressEvo;
+  var $, evoClass, vjsProgress;
 
   $ = jQuery;
 
@@ -8,7 +8,7 @@
     return "" + (hasDot ? "." : "") + "vjs-" + className + "--evo";
   };
 
-  vjsProgressEvo = function(options) {
+  vjsProgress = function(options) {
     var MARKER_ID_DELIMITER, control, createPoint, initTimepoints, markers, player, pts, video;
     player = this;
     video = $(this.el());
@@ -55,6 +55,6 @@
     }
   };
 
-  videojs.plugin("progressEvo", vjsProgressEvo);
+  videojs.plugin("progress", vjsProgress);
 
 }).call(this);

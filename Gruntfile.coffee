@@ -27,10 +27,9 @@ module.exports = ( grunt ) ->
     concat:
       coffee_progress:
         src: [
-            "<%= meta.script %>/definition.coffee"
             "<%= meta.script %>/progress.coffee"
           ]
-        dest: "<%= meta.dest_script %>/vjsProgress.coffee"
+        dest: "<%= meta.dest_script %>/<%= pkg.name %>.coffee"
       sass:
         src: [
             "<%= meta.style %>/progress.scss"
@@ -47,9 +46,7 @@ module.exports = ( grunt ) ->
       test:
         options:
           sassDir: "<%= meta.dest_style %>"
-          cssDir: "<%= meta.tests %>/videojs-evo"
-          javascriptsDir: "<%= meta.tests %>/javascripts"
-          imagesDir: "<%= meta.tests %>/images"
+          cssDir: "<%= meta.tests %>"
     coffee:
       compile:
         options:
@@ -72,14 +69,14 @@ module.exports = ( grunt ) ->
                 " */\n"
         sourceMap: true
       build:
-        src: "<%= meta.dest_script %>/vjsProgress.js"
-        dest: "<%= meta.dest_script %>/vjsProgress.min.js"
+        src: "<%= meta.dest_script %>/<%= pkg.name %>.js"
+        dest: "<%= meta.dest_script %>/<%= pkg.name %>.min.js"
     copy:
       test:
         expand: true
         cwd: "<%= meta.dest_script %>"
         src: ["*.js"]
-        dest: "<%= meta.tests %>/videojs-evo"
+        dest: "<%= meta.tests %>"
     clean:
       compiled: [
           "<%= meta.dest_script %>/**/*.coffee"

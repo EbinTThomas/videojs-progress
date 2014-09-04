@@ -1,4 +1,11 @@
-vjsProgressEvo = ( options ) ->
+"use strict"
+
+$ = jQuery
+
+evoClass = ( className, hasDot ) ->
+  return "#{if hasDot then "." else ""}vjs-#{className}--evo"
+
+vjsProgress = ( options ) ->
   player = this
   video = $(@el())
 
@@ -44,4 +51,4 @@ vjsProgressEvo = ( options ) ->
 
   return
 
-videojs.plugin "progressEvo", vjsProgressEvo
+videojs.plugin "progress", vjsProgress

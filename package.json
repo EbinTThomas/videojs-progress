@@ -1,20 +1,20 @@
 {
-  "name": "videojs-evo",
+  "name": "videojs-progress",
   "version": "0.1.0",
   "description": "A plugin for Video.js",
   "keywords": [
     "javascript",
-    "plugin",
     "videojs",
+    "plugin",
     "jQuery",
     "jquery"
   ],
   "author": "Ourai Lin <ourairyu@hotmail.com> (http://ourai.ws/)",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ourai/videojs-evo.git"
+    "url": "https://github.com/ourai/videojs-progress.git"
   },
-  "bugs": "https://github.com/ourai/videojs-evo/issues",
+  "bugs": "https://github.com/ourai/videojs-progress/issues",
   "engines": "node >= 0.8.0",
   "devDependencies": {
     "grunt": "~0.4.1",
