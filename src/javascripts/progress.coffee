@@ -1,16 +1,23 @@
 class Progress
   constructor: ( player ) ->
     @player = player
+    @timepoint =
+      initialized: false
+      delimiter: "-vjs-timepoint-"
+      data: []
 
-  createTimepoints: ( data ) ->
-    return false if not $.isArray data
+  timepoints: ( data ) ->
+    info = @timepoint
 
+    return false if info.initialized or not $.isArray(data)
+
+    inst = @
     player = @player
     video = $(player.el())
     duration = player.duration()
 
-    delimiter = "-vjs-timepoint-"
-    timepoints = []
+    delimiter = info.delimiter
+    timepoints = info.data
 
     container = $("<div />", {
         "class": evoClass "progress-timepoints"
@@ -29,29 +36,70 @@ class Progress
 
     # 添加时间点
     $.each data, ( idx, pt ) ->
-      container.append(createTimepoint(pt.time, pt.text)) if 0 <= Number(pt.time) <= duration
+      container.append(createTimepoint(Math.round(pt.time), pt.text)) if 0 <= Number(pt.time) <= duration
 
     player.controlBar.progressControl.el().appendChild container.get(0)
 
     # 将播放进度调整到指定时间点
     $(evoClass("progress-timepoint", true)).on "click", ->
-      player.currentTime timepoints[@id.split(delimiter)[1] - 1].sec
+      player.currentTime inst.timepointData(@id).sec
 
       return false
 
+    info.initialized = true
+
     return true
 
-  createTooltip: ->
+  timepointData: ( id ) ->
+    return @timepoint.data[id.split(@timepoint.delimiter)[1] - 1]
+
+  tooltip: ->
     player = @player
     progress = player.controlBar.progressControl
     duration = player.duration()
 
-    $(progress.el()).on "mousemove", ( event ) ->
-      bar = $(progress.el())
-      offsetLeft = bar.offset().left
-      currentPos = event.clientX
-      console.log (currentPos - offsetLeft)/bar.width() * duration
-      seekBar = progress.seekBar
-      return
+    tip = $("<div />", {
+        "class": evoClass "progress-tooltip"
+        "text": "0:00"
+      })
+
+    # 给数字补上前导零
+    zerofill = ( num ) ->
+
+      num = "0#{num}" if num < 10
+
+      return num
+
+    # 格式化时间
+    formatTime = ( time ) ->
+      time = Math.round time
+      base = 60
+
+      if time < base
+        time = "00:#{zerofill time}"
+      else
+        time = "#{zerofill time//base}:#{zerofill time%base}"
+
+      return time
+
+    progress.el().appendChild tip.get(0)
+
+    $(progress.el()).on
+      "mousemove": ( event ) =>
+        bar = $(progress.el())
+
+        offsetLeft = event.clientX - bar.offset().left
+        target = event.target
+        tipText = formatTime offsetLeft/bar.width()*duration
+
+        if $(target).is evoClass("progress-timepoint", true)
+          tipText += "<span>#{@timepointData(target.id).text}</span>"
+
+        tip.html tipText
+        tip.show()
+        tip.css "left", offsetLeft - tip.outerWidth()/2
+
+      "mouseleave": ->
+        tip.hide()
 
     return
