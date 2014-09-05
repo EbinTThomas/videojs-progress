@@ -2,6 +2,16 @@
 
 This is a plugin based on [jQuery](http://jquery.com/) for [Video.js](https://github.com/videojs/video.js) to make progress bar stronger.
 
+## Features
+
+1.  Tooltip
+
+    ![Tooltip](snapshots/tooltip.jpg)
+
+2.  Timepoint
+
+    ![Timepoint](snapshots/timepoint.jpg)
+
 ## Dependencies
 
 * jQuery 1.8.3
