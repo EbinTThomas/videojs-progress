@@ -1,8 +1,43 @@
 # Video.js Progress
 
-本项目是基于 [jQuery](http://jquery.com/) 开发的 [Video.js](https://github.com/videojs/video.js) 的一个增强进度条功能的插件。
+This is a plugin based on [jQuery](http://jquery.com/) for [Video.js](https://github.com/videojs/video.js) to make progress bar stronger.
 
-## 依赖
+## Dependencies
 
 * jQuery 1.8.3
 * Video.js 4.7.3
+
+## Installation
+
+    <link href="videojs-progress.css" rel="stylesheet">
+    <script src="jquery.js"></script>
+    <script src="videojs-progress.js"></script>
+
+## Usage
+
+    <script>
+      videojs("myVideo").progress({
+        timepoints: [
+            {
+              time: 9,
+              text: "Video.js"
+            },
+            {
+              time: 16,
+              text: "progress bar"
+            },
+            {
+              time: 23,
+              text: "http://video-js.zencoder.com/oceans-clip.ogv"
+            },
+            {
+              time: 28,
+              text: "already"
+            },
+            {
+              time: 47,
+              text: "evolution"
+            }
+          ]
+      });
+    </script>
